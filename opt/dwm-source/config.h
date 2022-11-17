@@ -61,7 +61,7 @@ static const char *colors[][3]  = {
 };
 
 /* ******************** Tags/Workspaces ******************** */
-static char *tags[] = {"", "", "", "", "", "", "", ""};
+static char *tags[] = {"", "", "", "", "", "", "", ""};
 
 static const int tagschemes[] = { SchemeTag1, SchemeTag2, SchemeTag3,
                                   SchemeTag4, SchemeTag5, SchemeTag6,
@@ -84,8 +84,8 @@ static const Rule rules[] = {
 	// { "Inkscape",     		NULL,       NULL,       0,            0,           1,           -1 },
 	// { "Xfce4-terminal",		NULL,       NULL,       1 << 0,       0,           0,           -1 },
 	// { "firefox",  			NULL,       NULL,       1 << 1,       0,           0,           -1 },
-	{ "code",  			NULL,       NULL,       1 << 2,       0,           0,           -1 },
-	{ "discord",  			NULL,       NULL,       1 << 3,       0,           0,           -1 },
+	// { "code",  			NULL,       NULL,       1 << 0,       0,           0,           -1 },
+	{ "discord",  			NULL,       NULL,       1 << 1,       0,           0,           -1 },
 	// { "Viewnior",  			NULL,       NULL,       0,       	  1,           1,           -1 },
 	// { "MPlayer",  			NULL,       NULL,       0,       	  1,           1,           -1 },
 	// { "Pcmanfm",  			NULL,       NULL,       0,       	  1,           1,           -1 },
@@ -152,6 +152,7 @@ static const char *termcmd[]  			= { "/usr/share/archcraft/dwm/bin/dwmterm.sh", 
 static const char *floatterm[]  		= { "/usr/share/archcraft/dwm/bin/dwmterm.sh", "--float", NULL };
 static const char *fmcmd[]    			= { "/usr/share/archcraft/dwm/bin/dwmapps.sh", "--file", NULL };
 static const char *editcmd[]  			= { "/usr/share/archcraft/dwm/bin/dwmapps.sh", "--editor", NULL };
+static const char *thunar[]  			= { "thunar", NULL };
 // static const char *webcmd[]  			= { "/usr/share/archcraft/dwm/bin/dwmapps.sh", "--web", NULL };
 static const char *firefox[]  			= { "firefox", NULL };
 static const char *discord[]  			= { "discord-canary", NULL };
@@ -212,7 +213,8 @@ static Key keys[] = {
 
 	// Launch Apps -----------
     { MODKEY|ShiftMask, 		XK_f, 						spawn, {.v = fmcmd } },
-    { MODKEY|ShiftMask, 		XK_e, 						spawn, {.v = editcmd } },
+    { MODKEY, 		            XK_t, 						spawn, {.v = editcmd } },
+    { MODKEY, 		            XK_e, 						spawn, {.v = thunar} },
     { MODKEY, 		            XK_w, 						spawn, {.v = firefox} },
     { MODKEY, 		            XK_d, 						spawn, {.v = discord} },
     { MODKEY, 		            XK_c, 						spawn, {.v = code} },
@@ -268,7 +270,8 @@ static Key keys[] = {
 	
 	// Window Management -----------
 	/* Murder */
-    { MODKEY, 					XK_q, 						killclient, {0} }, // Kill window
+    { MODKEY, 				            XK_q, 						killclient, {0} }, // Kill window
+    { ALTKEY, 					        XK_F4, 						killclient, {0} }, // Kill window
     // { MODKEY, 					XK_Escape, 					spawn, SHCMD("xkill") }, // xkill
 
 	/* Switch */
@@ -294,12 +297,15 @@ static Key keys[] = {
 
 	/* Misc */
     { MODKEY, 					XK_b, 						togglebar, {0} }, // Toggle bar
-    { MODKEY, 					XK_Tab, 					zoom, {0} }, // Switch to master
-    { ALTKEY, 					XK_Tab, 					view, {0} }, // Switch to last tag
-    //    { MODKEY, 					XK_d, 						hidewin, {0} }, // Hide window
-    //    { MODKEY|ShiftMask, 		XK_d, 						restorewin, {0} }, // Restore window
-    { MODKEY, 					XK_0, 						view, {.ui = ~0 } },
-    { MODKEY|ShiftMask, 		XK_0, 						tag, {.ui = ~0 } },
+    { ALTKEY,                   XK_Tab,                     shiftviewclients, { .i = +1 } },
+    { MODKEY,                   XK_Tab,                     shiftviewclients, { .i = +1 } },
+    { ControlMask,              XK_Tab,                     shiftviewclients, { .i = +1 } },
+    // { MODKEY, 					XK_Tab, 					zoom, {0} }, // Switch to master
+    // { ALTKEY, 					XK_Tab, 					view, {0} }, // Switch to last tag
+    // { MODKEY, 					XK_d, 						hidewin, {0} }, // Hide window
+    // { MODKEY|ShiftMask, 		    XK_d, 						restorewin, {0} }, // Restore window
+    // { MODKEY, 					XK_0, 						view, {.ui = ~0 } },
+    // { MODKEY|ShiftMask, 		XK_0, 						tag, {.ui = ~0 } },
 
 	// Layouts -----------
     { ALTKEY|ControlMask, 		XK_space, 					spawn, {.v = rofi_layoutcmd } },
