@@ -2,16 +2,17 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+# ZSH_THEME="archcraft"
 ZSH_THEME="half-life"
 
 # Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
+# Setting this variable when ZSH_THEME="archcraft"
 # a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
@@ -24,7 +25,7 @@ ZSH_THEME="half-life"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
+zstyle ':omz:update' mode disabled  # disable automatic updates
 # zstyle ':omz:update' mode auto      # update automatically without asking
 # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
@@ -100,9 +101,48 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# On-demand rehash
+zshcache_time="$(date +%s%N)"
+
+autoload -Uz add-zsh-hook
+
+rehash_precmd() {
+  if [[ -a /var/cache/zsh/pacman ]]; then
+    local paccache_time="$(date -r /var/cache/zsh/pacman +%s%N)"
+    if (( zshcache_time < paccache_time )); then
+      rehash
+      zshcache_time="$paccache_time"
+    fi
+  fi
+}
+
+add-zsh-hook -Uz precmd rehash_precmd
+
+# omz
+alias zshconfig="geany ~/.zshrc"
+alias ohmyzsh="thunar ~/.oh-my-zsh"
+
+# ls
+alias l='ls -lh'
+alias ll='ls -lah'
+alias la='ls -A'
+alias lm='ls -m'
+alias lr='ls -R'
+alias lg='ls -l --group-directories-first'
+
+# git
+alias gcl='git clone'
+# alias gi='git init'
+alias ga='git add'
+alias gc='git commit -m'
+alias gac='git add . && git commit -m'
+alias gp='git push'
+
+# codes
+alias cdhs='cd ~/codes/hub-server'
+alias cdhw='cd ~/codes/hub-web-client'
+alias codes='cd ~/codes'
+
 # fnm
 export PATH=/home/caio/.fnm:$PATH
 eval "`fnm env`"
-
-alias cdhs='cd ~/codes/hub-server/'
-alias cdhw='cd ~/codes/hub-web-client/'
